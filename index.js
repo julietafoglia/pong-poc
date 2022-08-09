@@ -6,6 +6,8 @@ let computerLevel = 0.1;
 let rectX = 0;
 const fps = 50;
 
+const FLIPPED_VIDEO = false;
+
 const constraints = {
   audio: true,
   video: {
@@ -80,7 +82,8 @@ function drawNet() {
 }
 
 function render() {
-  context.drawImage(video, 0, 0, canvas.width, canvas.height);
+  context.clearRect(0, 0, canvas.width, canvas.height);
+
   drawNet();
   drawText(user.score, canvas.width / 4, canvas.height / 5, "white");
   drawText(com.score, (3 * canvas.width) / 4, canvas.height / 5, "white");
@@ -187,6 +190,12 @@ async function init() {
   const stream = await navigator.mediaDevices.getUserMedia(constraints);
   window.stream = stream;
   video.srcObject = stream;
+
+  if (FLIPPED_VIDEO) {
+    video.style.webkitTransform = "scaleX(-1)";
+    video.style.transform = "scaleX(-1)";
+  }
+
   game();
 }
 
