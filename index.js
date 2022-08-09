@@ -2,10 +2,7 @@ const canvas = document.getElementById("pong");
 const video = document.getElementById("myvideo");
 const context = canvas.getContext("2d");
 
-let computerLevel = 0.1;
-let rectX = 0;
-const fps = 50;
-
+const COMPUTER_LEVEL = 0.1;
 const FLIPPED_VIDEO = false;
 
 const constraints = {
@@ -124,7 +121,7 @@ function update() {
   ball.x += ball.velocityX;
   ball.y += ball.velocityY;
 
-  com.y = ball.y - (com.y + com.height / 2) * computerLevel;
+  com.y = ball.y - (com.y + com.height / 2) * COMPUTER_LEVEL;
 
   if (ball.y + ball.radius > canvas.height || ball.y - ball.radius < 0) {
     ball.velocityY = -ball.velocityY;
@@ -188,7 +185,6 @@ function game() {
 async function init() {
   window.model = await cocoSsd.load();
   const stream = await navigator.mediaDevices.getUserMedia(constraints);
-  window.stream = stream;
   video.srcObject = stream;
 
   if (FLIPPED_VIDEO) {
