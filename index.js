@@ -1,8 +1,6 @@
 const canvas = document.getElementById("pong");
-const detectionCanvas = document.getElementById("canvas");
 const video = document.getElementById("myvideo");
 const context = canvas.getContext("2d");
-const detectionContext = detectionCanvas.getContext("2d");
 canvas.addEventListener("mousemove", movePaddle);
 let computerLevel = 0.1;
 let rectX = 0;
@@ -148,29 +146,25 @@ function update() {
 
 function drawDetections(detections) {
   detections.forEach((detection) => {
-    const [x, y, width, height] = detection.bbox;
     const text = detection.class;
-
     if (text === "cell phone") {
-      console.log("cell phone");
+      const [x, y, width, height] = detection.bbox;
       const color = "black";
-      detectionContext.strokeStyle = color;
-      detectionContext.font = "18px Arial";
-      detectionContext.fillStyle = color;
+      context.strokeStyle = color;
+      context.font = "18px Arial";
+      context.fillStyle = color;
 
-      detectionContext.beginPath();
-      detectionContext.fillText(text, x, y);
-      detectionContext.rect(x, y, width, height);
-      detectionContext.stroke();
+      context.beginPath();
+      context.fillText(text, x, y);
+      context.rect(x, y, width, height);
+      context.stroke();
     }
   });
 }
 
 function detect() {
-  cocoSsd.load().then((model) => {
-    model.detect(video).then((predictions) => {
-      drawDetections(predictions);
-    });
+  window.model.detect(video, undefined, 0.5).then((predictions) => {
+    drawDetections(predictions);
   });
 }
 
@@ -178,17 +172,18 @@ function game() {
   detect();
   update();
   render();
+  requestAnimationFrame(game);
 }
 
 // Access webcam
 async function init() {
+  window.model = await cocoSsd.load();
   const stream = await navigator.mediaDevices.getUserMedia(constraints);
   window.stream = stream;
   video.srcObject = stream;
+  game();
 }
 
 init();
-detect();
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-setInterval(game, 1000 / fps);
