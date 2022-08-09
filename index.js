@@ -1,7 +1,7 @@
 const canvas = document.getElementById("pong");
 const video = document.getElementById("myvideo");
 const context = canvas.getContext("2d");
-canvas.addEventListener("mousemove", movePaddle);
+
 let computerLevel = 0.1;
 let rectX = 0;
 const fps = 50;
@@ -12,6 +12,10 @@ const constraints = {
     width: window.innerWidth,
     height: window.innerHeight,
   },
+};
+
+const detectionCoords = {
+  y: 0,
 };
 
 const user = {
@@ -85,9 +89,9 @@ function render() {
   drawCircle(ball.x, ball.y, ball.radius, ball.color);
 }
 
-function movePaddle(evt) {
+function movePaddle() {
   let rect = canvas.getBoundingClientRect();
-  user.y = evt.clientY - rect.top - user.height / 2;
+  user.y = detectionCoords.y - rect.top - user.height / 2;
 }
 
 function collision(b, p) {
@@ -158,6 +162,8 @@ function drawDetections(detections) {
       context.fillText(text, x, y);
       context.rect(x, y, width, height);
       context.stroke();
+      detectionCoords.y = y;
+      movePaddle();
     }
   });
 }
