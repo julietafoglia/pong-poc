@@ -6,6 +6,8 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 
 const device = require("express-device");
+const playerSound = require("play-sound")((opts = {}));
+
 app.use(device.capture());
 
 app.use(express.static(`${__dirname}/public`));
@@ -27,6 +29,11 @@ io.on("connection", (socket) => {
   console.log("a user connected", socket.id);
   socket.on("disconnect", () => {
     console.log("user disconnected");
+  });
+  socket.on("playSound", () => {
+    playerSound.play("./public/sounds/boop.mp3", function (err) {
+      if (err) throw err;
+    });
   });
 });
 
