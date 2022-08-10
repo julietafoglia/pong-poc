@@ -30,8 +30,7 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(9000, "127.0.0.1", (req, res) => {
-  console.log(req);
+server.listen(9000, "127.0.0.1", () => {
   console.log("\x1b[36m", "Server is running on port 9000");
   console.log("\x1b[1m", "-> Go to http://localhost:9000");
 });
