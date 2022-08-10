@@ -5,19 +5,22 @@ const server = http.createServer(app);
 const { Server } = require("socket.io");
 const io = new Server(server);
 
-app.get("/celu", (req, res) => {
-  res.send("Celu connected");
-});
+const device = require("express-device");
+app.use(device.capture());
 
 app.use(express.static(`${__dirname}/public`));
 
 app.get("/", (req, res) => {
-  res.sendFile(`${__dirname}/index.html`, (err) => {
-    if (err) {
-      console.log(err);
-      res.end(err.message);
-    }
-  });
+  if (req.device.type === "phone") {
+    res.send("Phone connected");
+  } else {
+    res.sendFile(`${__dirname}/index.html`, (err) => {
+      if (err) {
+        console.log(err);
+        res.end(err.message);
+      }
+    });
+  }
 });
 
 io.on("connection", (socket) => {
