@@ -133,6 +133,7 @@ function update() {
     if (player === user) {
       // io.to(socketId).emit(/* ... */);
       socket.emit((hitMessage.style.visibility = "visible"));
+      socket.emit('playSound');
       setTimeout(
         () => socket.emit((hitMessage.style.visibility = "hidden")),
         2000
