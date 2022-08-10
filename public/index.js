@@ -131,6 +131,7 @@ function update() {
   let player = ball.x < canvas.width / 2 ? user : com;
   if (collision(ball, player)) {
     if (player === user) {
+      // io.to(socketId).emit(/* ... */);
       socket.emit((hitMessage.style.visibility = "visible"));
       setTimeout(
         () => socket.emit((hitMessage.style.visibility = "hidden")),
