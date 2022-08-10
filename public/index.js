@@ -1,5 +1,6 @@
 const canvas = document.getElementById("pong");
 const video = document.getElementById("myvideo");
+const hitMessage = document.getElementById("hit");
 const context = canvas.getContext("2d");
 
 const COMPUTER_LEVEL = 0.1;
@@ -129,6 +130,13 @@ function update() {
 
   let player = ball.x < canvas.width / 2 ? user : com;
   if (collision(ball, player)) {
+    if (player === user) {
+      socket.emit((hitMessage.style.visibility = "visible"));
+      setTimeout(
+        () => socket.emit((hitMessage.style.visibility = "hidden")),
+        2000
+      );
+    }
     let collidePoint = ball.y - (player.y + player.height / 2);
     collidePoint = collidePoint / (player.height / 2);
     const angleRad = collidePoint * (Math.PI / 4);
