@@ -6,12 +6,6 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 
 app.get("/celu", (req, res) => {
-  io.on("connection", (socket) => {
-    console.log("a user connected", socket.id);
-    socket.on("disconnect", () => {
-      console.log("user disconnected");
-    });
-  });
   res.send("Celu connected");
 });
 
@@ -23,6 +17,13 @@ app.get("/", (req, res) => {
       console.log(err);
       res.end(err.message);
     }
+  });
+});
+
+io.on("connection", (socket) => {
+  console.log("a user connected", socket.id);
+  socket.on("disconnect", () => {
+    console.log("user disconnected");
   });
 });
 
